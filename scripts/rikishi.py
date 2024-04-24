@@ -3,6 +3,7 @@ import requests as re
 import seaborn as sns
 import pandas as pd
 from pandas.api.types import CategoricalDtype
+from math import ceil
 import matplotlib.pyplot as plt
 
 divisions = CategoricalDtype(
@@ -55,13 +56,15 @@ else :
 	sumoid = d.json()['records'][0]['id']
 	d = get_data(sumoid)
 
-	sns.set_style("whitegrid")
-	pal = sns.diverging_palette(220, 20, l = 65, center = "dark", as_cmap = True)
-	g = sns.scatterplot(
-		x = "id", y = "division", data = d,
-		hue = "r", palette = pal, edgecolors = "dimgray"
-	)
-	g.set_xlabel('Basho', fontdict={'size': 15})
-	g.set_ylabel('Division', fontdict={'size': 15})
-	g.legend(title = "Rank")
-	plt.show()
+sns.set_style("white", {'grid.color': '#eeeeee', 'axes.grid': True})
+pal = sns.diverging_palette(220, 20, l = 65, center = "dark", as_cmap = True)
+g = sns.scatterplot(
+	x = "id", y = "division", data = d,
+	hue = "r", palette = pal, edgecolors = "dimgray"
+)
+sns.despine()
+g.set_xlabel('Year', fontdict={'size': 15})
+g.set_ylabel('Division', fontdict={'size': 15})
+g.legend(title = "Rank")
+plt.xticks([x * 6 for x in range(ceil(d.id.max() / 6) + 1)], [x for x in range(ceil(d.id.max() / 6) + 1)])
+plt.show()

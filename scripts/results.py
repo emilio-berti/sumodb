@@ -8,6 +8,12 @@ import matplotlib.pyplot as plt
 
 def get_data(sumoid, basho):
 	m = re.get('https://www.sumo-api.com/api/rikishi/{}/matches?bashoId={}'.format(sumoid, basho))
+	if m.status_code != 200:
+		print("Request error. exiting...")
+		return 1
+	if m.json()['total'] == 0:
+		print("No records found. exiting...")
+		return 1
 	m = m.json()['records']
 	opponent=[]
 	res=[]
@@ -34,7 +40,7 @@ else :
 	sumoid = d.json()['records'][0]['id']
 	d = get_data(sumoid, basho)
 
-print(d)
+print(d) if d != 1 else print("Error!")
 
 # sns.set_style("white", {'grid.color': '#eeeeee', 'axes.grid': True})
 # pal = sns.diverging_palette(220, 20, l = 65, center = "dark", as_cmap = True)
